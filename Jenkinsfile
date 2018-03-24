@@ -21,7 +21,7 @@ pipeline {
                 sh 'mvn clean install -Dmaven.test.failure.ignore=true'
             }
         }
-    }
+    
     post {
         always {
             archive "target/**/*"
