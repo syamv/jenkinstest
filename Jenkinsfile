@@ -9,31 +9,18 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Clean Build'
-                bat 'mvn clean compile'
+                bat 'mvn clean install'
             }
-        }
-	    
-	 
-   
-	    stages {
-        stage("build") {
-            steps {
-                sh 'mvn clean install -Dmaven.test.failure.ignore=true'
-            }
-        }
-    
-    post {
+		post {
         always {
             archive "target/**/*"
             junit 'target/surefire-reports/*.xml'
 		  jacoco(execPattern: 'target/jacoco.exec')
         }
     }
-}
+        }
 	    
-	    
-	    
-		 
+
         stage('SonarQube analysis') {
             steps {
                 echo 'Sonar Scanner'
