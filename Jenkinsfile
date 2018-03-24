@@ -14,21 +14,25 @@ pipeline {
         }
 	    
 	 
-        stages {
+   
+	    stages {
         stage("build") {
             steps {
-                bat 'mvn clean package -Dmaven.test.failure.ignore=true'
+                sh 'mvn clean install -Dmaven.test.failure.ignore=true'
             }
         }
     }
     post {
-        success {
+        always {
             archive "target/**/*"
-           // junit 'target/surefire-reports/*.xml'
-		junit 'target/**/*.xml'
-                    jacoco(execPattern: 'target/jacoco.exec')
+            junit 'target/surefire-reports/*.xml'
+		  jacoco(execPattern: 'target/jacoco.exec')
         }
     }
+}
+	    
+	    
+	    
 		 
         stage('SonarQube analysis') {
             steps {
