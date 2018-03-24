@@ -17,14 +17,16 @@ pipeline {
             steps {
                 bat "mvn verify"
 		   // bat "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dmaven.test.failure.ignore=true -Dsonar.jacoco.reportPaths=${env.WORKSPACE}/target/jacoco.exec"
-		    jacoco( 
-   //   execPattern: 'target/*.exec',
-     // classPattern: 'target/classes',
-      //sourcePattern: 'src/main/java',
-      //exclusionPattern: 'src/test*'
-)
-		    junit '*/build/test-results/*.xml'
-
+		   
+		 junit '*/build/test-results/*.xml'
+		    //step( [ $class: 'JacocoPublisher' ] )
+		 step([$class: 'JacocoPublisher', execPattern: 'target/jacoco.exec'])
+		 jacoco( 
+		   //   execPattern: 'target/*.exec',
+		     // classPattern: 'target/classes',
+		      //sourcePattern: 'src/main/java',
+		      //exclusionPattern: 'src/test*'
+		)
             }
            
         }
@@ -34,7 +36,7 @@ pipeline {
                 echo 'Sonar Scanner'
                	def scannerHome = tool 'sonar-scanner-3.0.3'
 			    withSonarQubeEnv('SonarQube Server') {
-			    	bat 'C:\sonar-scanner-3.0.3'
+			    	bat 'C:\sonar-scanner-3.0.3\bin\sonar-scanner'
 			    }
             }
         }
