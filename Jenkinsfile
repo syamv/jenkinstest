@@ -12,18 +12,17 @@ pipeline {
                 bat 'mvn clean compile'
             }
         }
-        stage('Test') {
+       
+	stage ('Functional tests') {
             steps {
-                echo 'Testing'
-                bat 'mvn test'
-		junit 'target/**/*.xml'
+                bat "mvn verify"
             }
-        }
-        stage('JaCoCo') {
-            steps {
-                echo 'Code Coverage'
-		    jacoco(execPattern: 'target/jacoco.exec')
-                 }
+            post {
+                success {
+                    junit 'target/**/*.xml'
+                    jacoco(execPattern: 'target/jacoco.exec')
+                }
+            }
         }
         stage('Sonar') {
             steps {
