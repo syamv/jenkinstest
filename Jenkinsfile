@@ -12,25 +12,24 @@ pipeline {
                 bat 'mvn clean compile'
             }
         }
-       
-	stage ('Functional tests') {
-            steps {
-                //bat "mvn verify"
-		 bat "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar -Dmaven.test.failure.ignore=true -Dsonar.jacoco.reportPaths=${env.WORKSPACE}/target/jacoco.exec"
-		   
-		// junit '*/target/test-results/*.xml'
-		    //step( [ $class: 'JacocoPublisher' ] )
-		 step([$class: 'JacocoPublisher', execPattern: 'target/jacoco.exec'])
-		 jacoco( 
-		   //   execPattern: 'target/*.exec',
-		     // classPattern: 'target/classes',
-		      //sourcePattern: 'src/main/java',
-		      //exclusionPattern: 'src/test*'
-		)
-            }
-           
-        }
+	    
 	 
+        stages {
+        stage("build") {
+            steps {
+                bat 'mvn clean package -Dmaven.test.failure.ignore=true'
+            }
+        }
+    }
+    post {
+        success {
+            archive "target/**/*"
+           // junit 'target/surefire-reports/*.xml'
+		junit 'target/**/*.xml'
+                    jacoco(execPattern: 'target/jacoco.exec')
+        }
+    }
+		 
         stage('SonarQube analysis') {
             steps {
                 echo 'Sonar Scanner'
@@ -42,12 +41,7 @@ pipeline {
         }
 	   	    
 	    
-        stage('Package') {
-            steps {
-                echo 'Packaging'
-                bat 'mvn package -DskipTests'
-            }
-        }
+      
         stage('Deploy') {
             steps {
                 echo '## TODO DEPLOYMENT ##'
