@@ -17,13 +17,14 @@ pipeline {
             steps {
                 bat "mvn verify"
             }
-            post {
-                success {
-                    junit 'target/**/*.xml'
-                    jacoco(execPattern: 'target/jacoco.exec')
-                }
-            }
+           
         }
+	  step([$class: 'JacocoPublisher', 
+	      execPattern: 'target/*.exec',
+	      classPattern: 'target/classes',
+	      sourcePattern: 'src/main/java',
+	      exclusionPattern: 'src/test*'
+	])
         stage('Sonar') {
             steps {
                 echo 'Sonar Scanner'
