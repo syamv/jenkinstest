@@ -16,13 +16,14 @@ pipeline {
             steps {
                 echo 'Testing'
                 bat 'mvn test'
+		junit 'target/**/*.xml'
             }
         }
         stage('JaCoCo') {
             steps {
                 echo 'Code Coverage'
-                jacoco()
-            }
+		    jacoco(execPattern: 'target/jacoco.exec')
+                 }
         }
         stage('Sonar') {
             steps {
