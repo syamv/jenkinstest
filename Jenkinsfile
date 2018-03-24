@@ -36,7 +36,7 @@ pipeline {
                 echo 'Sonar Scanner'
                	def scannerHome = tool 'sonar-scanner-3.0.3'
 			    withSonarQubeEnv('SonarQube Server') {
-			    	bat 'C:\sonar-scanner-3.0.3\bin\sonar-scanner'
+			    	bat 'C:/sonar-scanner-3.0.3/bin/sonar-scanner'
 			    }
             }
         }
