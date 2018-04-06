@@ -6,7 +6,7 @@
 	<groupId>org.rahul</groupId>
 	<artifactId>springboot</artifactId>
 	<version>0.0.1</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>springboot</name>
 	<description>Project for Spring Boot Jenkins</description>
